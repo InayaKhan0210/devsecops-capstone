@@ -1,9 +1,26 @@
-FROM jenkins/jenkins:lts
+pipeline {
+    agent any
 
-USER root
+    stages {
 
-RUN apt-get update && \
-    apt-get install -y docker.io && \
-    apt-get clean
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-USER jenkins
+        stage('Project Info') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t devsecops-notes-app .'
+            }
+        }
+
+    }
+}
